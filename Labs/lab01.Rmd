@@ -54,7 +54,7 @@ From [here](https://docs.rstudio.com/other/rstudio-cloud/):
 
 2. I will share the **biol297-spring2020** Workspace with you once everyone is registered.
 
-3. Click on down-arrow next to "New Project" the **labs** Project. THen select "New Project from Git Repo"
+3. Click on down-arrow next to "New Project", then select "New Project from Git Repo"
 
 ![](../Images/rstudio-cloud-project.png)
 
