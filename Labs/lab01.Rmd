@@ -54,9 +54,16 @@ From [here](https://docs.rstudio.com/other/rstudio-cloud/):
 
 2. I will share the **biol297-spring2020** Workspace with you once everyone is registered.
 
-3. Click on the **labs** Project
+3. Click on down-arrow next to "New Project" the **labs** Project. THen select "New Project from Git Repo"
 
 ![](../Images/rstudio-cloud-project.png)
+
+4. Enter the URL of the Git repository (<https://github.com/cdmuir/biol297-spring2020>), then click OK: 
+
+![](../Images/rstudio-cloud-repo.png)
+5. Once the Project is deployed, name the project with your name and the week, e.g. "muir-chris-week01". You will need to click in near the top of the screen to change name from Untitled:
+
+![](../Images/rstudio-cloud-name.png)
 
 When you start *RStudio Cloud*, it will automatically start R as well. You run *R* inside *RStudio Cloud*. 
 
@@ -389,7 +396,14 @@ Note that the syntax here requires a double `==` sign. In *R* (and many other co
 
   a. Open a new *R* script file. Start by adding comments with your name and the
 week (Week 1) at the top.
-  b. For each of the questions below, write the question number as a comment,
+  b. Save the script as "lab-report-week01.R". In future weeks, use week02, week03, etc. To save, go to "File > Save" or use command-S shortcut.
+  
+  ![](../Images/rstudio-cloud-save1.png)
+    ![](../Images/rstudio-cloud-save2.png)
+    ![](../Images/rstudio-cloud-save3.png)
+
+  
+  c. For each of the questions below, write the question number as a comment,
 followed by any *R* code you use to do the question, and give the answers as
 comments.
 
