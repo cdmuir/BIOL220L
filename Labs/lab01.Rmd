@@ -1,6 +1,8 @@
 ---
 title: 'Week 1: Introduction to R'
-output: html_document
+output: 
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -339,8 +341,12 @@ Very importantly, we can grab one of the columns from a data frame by itself. We
 
 For example, to show a list of the age of all the passengers on the *Titanic*, use
 
-```{r}
+```{r, echo=TRUE, eval=FALSE}
 titanicData$age
+```
+
+```{r, echo=FALSE, eval=TRUE}
+head(titanicData$age)
 ```
 
 This will show a vector that has all the values for this variable `age`, one for each individual in the data set.
@@ -369,10 +375,82 @@ library(dplyr)
 
 In the titanic data set there is a variable named `sex`, and an individual is female if that variable has value “`female`”. We can create a new data frame that includes only the data from females with the following command:
 
-```{r}
+```{r, rows.print=5}
 filter(titanicData, sex == "female")
 ```
 
 This new data fame will include all the same columns as the original `titanicData`, but it will only include the rows for which the `sex` was “`female`”.
 
 Note that the syntax here requires a double `==` sign. In *R* (and many other computer languages), the double equal sign creates a statement that can be evaluated as `TRUE` or `FALSE`, while a single equal sign may change the value of the first variable to the value on the right-hand side of the equal sign. Here we are asking, for each individual, whether `sex` is “`female`”, not assigning the value ”`female`” to the variable sex. So we use a double equal sign `==`.
+
+## Questions
+
+1. For each week, create an *R* script that captures the commands that you use to answer the questions. Use a `#` at the beginning of each comment line to record written answers.
+
+  a. Open a new *R* script file. Start by adding comments with your name and the
+week (Week 1) at the top.
+  b. For each of the questions below, write the question number as a comment,
+followed by any *R* code you use to do the question, and give the answers as
+comments.
+
+2. Run the **Learning the tools** commands in *R* from your Week 1 script. Did you get the same answers as shown in the text?
+
+3. For each of the following, come up with a variable name that would be appropriate to use in *R* for the listed variable:
+
+ Variable | Name in *R*
+----------|-------------
+ Body temperature in Celcius |
+ How much aspirin is given per dose for a patient |
+ Number of televersions per person |
+ Height (including neck and extended legs) of giraffes |
+ 
+4. USe *R* to calculate:
+
+  a. $15 \times 17$
+  b. $13^3$
+  c. $\text{log}_e(14)$ (natural log)
+  d. $\text{log}_{10}(100)$ (base 10 log)
+  e. $\sqrt{81}$
+  
+5. People are notoriously dishonest about revealing how often they perform antisocial behaviors like peeing in swimming pools. (In addition to being disgusting, the nitrogenous chemicals in urine combine with the pool’s chlorine to produce some toxic chemicals like trichloramine, the source of most skin irritations for swimmers.) A group of researchers (Jmaiff Blackstock *et al*. 2017) recently realized that an artificial sweetener called ACE passes out in urine unmetabolized and in known average quantities, and therefore by measuring ACE concentrations we can measure the amount of urine in a pool.
+
+Here is a list of measurements, each from a different pool, of the concentration of ACE (measured in ng/L) for 23 different pools in Canada.
+
+> 640, 1070, 780, 70, 160, 130, 60, 50, 2110, 70, 350, 30, 210, 90, 470, 580, 250, 310, 460, 430, 140, 1070, 130
+
+  a. In *R*, create a vector of these data, and name it appropriately.
+  b. What is the mean ACE concentration of these 23 pools?
+  c. Urine on average has 4000 ng ACE/ ml. Therefore to convert these measurements of ng ACE / L pool water to ml urine / L pool water we need to divide each by 4000. Make a new vector showing the concentration of urine per liter in these 23 pools. Give it a suitable name.
+  d. What is the mean concentration of urine per liter? How did this change relative to the mean measurement of ng ACE / L?
+  e. The arithmetic mean is calculated by adding up all the numbers and dividing by how many numbers there are. Calculate the mean of these numbers using `sum()` and `length()`. Did you get the same answer as with using `mean()`?
+  f. Use *R* to calculate the average amount of urine (in ml) in a 500,000 L pool.
+  
+6. Weddell seals live in Antarctic waters and take long strenuous dives in order to find fish to feed upon. Researchers (Williams *et al*. 2004) wanted to know whether these feeding dives were more energetically expensive than regular dives (perhaps because they are deeper, or the seal has to swim further or faster). They measured the metabolic costs of dives using the oxygen consumption of 10 animals (in ml O$_2$ / kg) during a feeding dive. Here are the data:
+
+> 71.0, 77.3, 82.6, 96.1, 106.6, 112.8, 121.2, 126.4, 127.5, 143.1
+
+For the same 10 animals, they also measured the oxygen consumption in non-feeding
+dives. With the 10 animals in the same order as before, here are those data:
+
+> 42.2, 51.7, 59.8, 66.5, 81.9, 82.0, 81.3, 81.3, 96.0, 104.1
+
+  a. Make a vector for each of these lists, and give them appropriate names.
+  b. Confirm (using *R*) that both of your vectors have the same number of individuals in them.
+  c. Create a vector called `MetabolismDifference` by calculating the difference in oxygen consumption between feeding dives and nonfeeding dives for each animal.
+  d. What is the average difference between feeding dives and nonfeeding dives in oxygen consumption?
+  e. Another appropriate way to represent the relationship between these two
+numbers would be to take the ratio of O$_2$ consumption for feeding dives over
+the O$_2$ consumption of nonfeeding dives. Make a vector which gives this ratio
+for each seal.
+  f. Sometimes ratios are easier to analyze when we look at the log of the ratio. Create a vector which gives the log of the ratios from the previous step. (Use the natural log.) What is the mean of this log-ratio?
+  
+7. The data file called “countries.csv” in the Data folder contains information about all the countries on Earth^[These data mainly come from the World Health Organization, but the Continent list comes from <https://datahub.io/> and the ecological footprint and cell phone data come from <http://www.nationmaster.com>.]. Each row is a country, and each column contains a variable.
+
+  a. Use `read.csv()` to read the data from this file into a data frame called
+`countries`.
+  b. Use `summary()` to get a quick description of this data set. What are the first three variables?
+  c. Using the output of `summary()`, how many countries are from Africa in this data set?
+  d. What kinds of variables (i.e., categorical or numerical) are continents, `cell_phone_subscriptions_per_100_people_2012`, `total_population_in_thousands_2015`, and `fines_for_tobacco_advertising_2014`? (Don't go by their variable names – look at the data in the summary results to decide.)
+  e. Add a new column to your countries data frame that has the difference in ecological footprint between 2012 and 2000. What is the mean of this difference? (Note: this variable will have “missing data”, which means that some of the countries do not have data in this file for one or the other of the years of ecological footprint. By default, *R* doesn’t calculate a mean unless all the data are present. To tell R to ignore the missing data, add an option to the `mean()` command that says `na.rm=TRUE`. We’ll learn more about this later.)
+
+8. Using the countries data again, create a new data frame called `AfricaData`, that only includes data for countries in Africa. What is the sum of the `total_population_in_thousands_2015` for this new data frame?
