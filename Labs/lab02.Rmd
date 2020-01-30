@@ -196,7 +196,7 @@ This will cause the contents of the manual page for this function to appear in t
 
 ## Questions
 
-#### 2. Let’s use the data from “countries.csv” to practice making some graphs.
+#### 1. Let’s use the data from “countries.csv” to practice making some graphs.
 
   a. Read the data from the file “countries.csv” in the Data folder.
   b. Make sure that you have run `library(ggplot2)`. Why is this necessary for the remainder of this question?
@@ -205,7 +205,7 @@ This will cause the contents of the manual page for this function to appear in t
   e. Draw a scatterplot that shows the relationship between the two numerical
 variables `life_expectancy_at_birth_male` and `life_expectancy_at_birth_female.`
 
-#### 3. The ecological footprint is a widely-used measure of the impact a person has on the planet. It measures the area of land (in hectares) required to generate the food, shelter, and other resources used by a typical person and required to dispose of that person’s wastes. Larger values of the ecological footprint indicate that the typical person from that country uses more resources.
+#### 2. The ecological footprint is a widely-used measure of the impact a person has on the planet. It measures the area of land (in hectares) required to generate the food, shelter, and other resources used by a typical person and required to dispose of that person’s wastes. Larger values of the ecological footprint indicate that the typical person from that country uses more resources.
 
 The countries data set has two variables for many countries showing the ecological footprint of an average person in each country. `ecological_footprint_2000` and `ecological_footprint_2012` show the ecological footprints for the years 2000 and 2012, respectively.
 
@@ -213,9 +213,9 @@ The countries data set has two variables for many countries showing the ecologic
   b. Describe the relationship between the footprints for the two years. Does the value of ecological footprint of 2000 seem to predict anything about its value in 2012?
   c. From this graph, does the ecological footprint tend to go up or down in the years between 2000 and 2012? Did the countries with high or low ecological footprint change the most over this time? (Hint: you can add a one-to-one line to your graph by adding `+geom_abline(intercept = 0, slope = 1)` to your `ggplot()` command. This will make it easier to see when your points are above or below the line of equivalence.)
 
-#### 4. Use the countries data again. Plot the relationship between continent and female life expectancy at birth. Describe the patterns that you see.
+#### 3. Use the countries data again. Plot the relationship between continent and female life expectancy at birth. Describe the patterns that you see.
 
-#### 5. Muchala (2006) measured the length of the tongues of eleven different species of South American bats, as well as the length of their palates (to get an indication of the size of their mouths). All of these bats use their tongues to feed on nectar from flowers. Data from the article are given in the file "BatTongues.csv". In this file, both Tongue Length and Palette Length are given in millimeters.
+#### 4. Muchala (2006) measured the length of the tongues of eleven different species of South American bats, as well as the length of their palates (to get an indication of the size of their mouths). All of these bats use their tongues to feed on nectar from flowers. Data from the article are given in the file "BatTongues.csv". In this file, both Tongue Length and Palette Length are given in millimeters.
 
   a. Import the data and inspect it using `summary()`. You can call the data set whatever you like, but in one of hte later steps we'll assume it is called `bat_tongues`. Each value for tongue length and palate length is a species mean, calculated from a sample of individuals per species.
   b. Draw a scatter plot to show the association between palate length and tongue length, with tongue length as the response variable. Describe the association: is it positive or negative? Is it strong or weak?
@@ -231,4 +231,4 @@ filter(bat_tongues, tongue_length > 80)
 
 The unusual species is *Anoura fistulata* (See a photo [here](https://www.researchgate.net/figure/Partially-extended-tongue-of-A-fistulata-ICN-19653-from-Genova-Narino-Arrow-showing_fig4_235352132)). This species has an outrageously long tongue, which it uses to collect nectar from a particular flower (can you guess what feature of the flower has led to the evolution of such a long tongue?). See the article by Muchala (2006) to learn more about the biology of this strange bat.
 
-#### 6. Pick one of the plots you made using R today. What could be improved about this graph to make it a more effective presentation of the data?
+#### 5. Pick one of the plots you made using R today. What could be improved about this graph to make it a more effective presentation of the data?
