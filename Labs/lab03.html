@@ -1764,6 +1764,7 @@ summary {
 </div>
 <div id="activities-and-questions" class="section level2">
 <h2>Activities and Questions</h2>
+<p>To make your lives easier, go ahead and install <strong>dplyr</strong> and <strong>ggplot2</strong> in your current project because you will need them later.</p>
 <div id="review-import-battongues2.csv-using-the-read.csv-name-the-data.frame-bat_tongues-and-make-a-scatterplot-using-the-ggplot2-package.-it-should-look-the-same-as-last-week-unless-you-made-a-typo." class="section level3">
 <h3>1. Review: Import “BatTongues2.csv” using the <code>read.csv()</code>, name the data.frame <code>bat_tongues</code>, and make a scatterplot using the <strong>ggplot2</strong> package. It should look the same as last week unless you made a typo.</h3>
 </div>
@@ -1851,7 +1852,7 @@ leafsize &lt;- filter(leafsize, !is.na(leafsize_cm2))</code></pre>
 <li><p>To take a random sample, all members of the population must have the same chance of being chosen for our sample. In <em>R</em>, the function <code>sample.int()</code> randomly chooses integers from a given range. For example, to randomly sample 5 individuals from 25 possibilities, we can use:</p></li>
 </ol>
 <pre class="r"><code>sample.int(n = 25, size = 5)</code></pre>
-<pre><code>## [1] 25 20 23  3 14</code></pre>
+<pre><code>## [1] 11  2 13 17  3</code></pre>
 <p>This tells <em>R</em> to give us a set of 5 numbers randomly chosen from the integers 1 to 25. (When you run this line you will almost certainly get a different output. It is randomly choosing numbers, so we expect different answers each time.)</p>
 <p>Here’s a fun trick - if you want to get the same random sample every time, use the <code>set.seed()</code> function. Run the code below and you should get the same answer as me.</p>
 <pre class="r"><code>set.seed(20200206)

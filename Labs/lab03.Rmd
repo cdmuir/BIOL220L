@@ -95,6 +95,8 @@ It should something like this:
 
 ## Activities and Questions
 
+To make your lives easier, go ahead and install **dplyr** and **ggplot2** in your current project because you will need them later.
+
 ### 1. Review: Import "BatTongues2.csv" using the `read.csv()`, name the data.frame `bat_tongues`, and make a scatterplot using the **ggplot2** package. It should look the same as last week unless you made a typo.
 
 ### 2. Calculate the sample variance and standard deviation.
