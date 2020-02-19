@@ -1841,9 +1841,7 @@ squared_devs &lt;- (Y - Y_bar) ^ 2</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>To make our lives simpler, let’s first filter out the missing values using the <code>filter()</code> function in <strong>dplyr</strong>.</li>
 </ol>
-<pre class="r"><code>leafsize &lt;- read.csv(&quot;../Data/wright_etal_2017.csv&quot;)
-
-library(dplyr)
+<pre class="r"><code>library(dplyr)
 
 leafsize &lt;- filter(leafsize, !is.na(leafsize_cm2))</code></pre>
 <p>Note how we simply re-assigned the name <code>leafsize</code> after filtering it. The function <code>!is.na()</code> keeps all values that are NOT <code>NA</code> (i.e. missing). In <em>R</em>, <code>!</code> means NOT.</p>
@@ -1852,7 +1850,7 @@ leafsize &lt;- filter(leafsize, !is.na(leafsize_cm2))</code></pre>
 <li><p>To take a random sample, all members of the population must have the same chance of being chosen for our sample. In <em>R</em>, the function <code>sample.int()</code> randomly chooses integers from a given range. For example, to randomly sample 5 individuals from 25 possibilities, we can use:</p></li>
 </ol>
 <pre class="r"><code>sample.int(n = 25, size = 5)</code></pre>
-<pre><code>## [1] 11  2 13 17  3</code></pre>
+<pre><code>## [1] 17 14 13 18  2</code></pre>
 <p>This tells <em>R</em> to give us a set of 5 numbers randomly chosen from the integers 1 to 25. (When you run this line you will almost certainly get a different output. It is randomly choosing numbers, so we expect different answers each time.)</p>
 <p>Here’s a fun trick - if you want to get the same random sample every time, use the <code>set.seed()</code> function. Run the code below and you should get the same answer as me.</p>
 <pre class="r"><code>set.seed(20200206)

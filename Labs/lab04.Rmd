@@ -1,5 +1,5 @@
 ---
-title: 'Week 3: Sampling'
+title: 'Week 4: Sampling distributions'
 output: 
   html_document:
     df_print: paged
@@ -13,10 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Goals
 
-* Learn to create data files
-* Explore the importance of random sampling
-* Understand variance and standard deviation
-* Understand mean and median
+* Understand the sampling distribution of an estimate
+* Investigate sampling error and sampling bias
 
 ## Learning the Tools
 
@@ -94,8 +92,6 @@ It should something like this:
 ![](../Images/google-sheets-12.png)
 
 ## Activities and Questions
-
-To make your lives easier, go ahead and install **dplyr** and **ggplot2** in your current project because you will need them later.
 
 ### 1. Review: Import "BatTongues2.csv" using the `read.csv()`, name the data.frame `bat_tongues`, and make a scatterplot using the **ggplot2** package. It should look the same as last week unless you made a typo.
 
@@ -195,6 +191,8 @@ Let's assume that the dataset represents the entire population of leaf sizes in 
   a. To make our lives simpler, let's first filter out the missing values using the `filter()` function in **dplyr**.
 
 ```{r, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE}
+
+leafsize <- read.csv("../Data/wright_etal_2017.csv")
 
 library(dplyr)
 
