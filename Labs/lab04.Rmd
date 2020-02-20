@@ -1,8 +1,6 @@
 ---
 title: 'Week 4: Sampling distributions'
-output: 
-  html_document:
-    df_print: paged
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * Understand the sampling distribution of an estimate
 * Investigate sampling error
+* Calculate standard error of the mean
+* Calculate confidence intervals
 
 ## Learning the Tools
 
@@ -138,7 +138,65 @@ ggplot(df, aes(Y)) +
 
 ```
 
-## Activties
+### Standard error of the mean
+
+The standard error of the mean ($\mathrm{SE}_{\bar{Y}}$) quantifies our uncertainty in our estimate of the population mean, $\bar{Y}$. Specifically, $\mathrm{SE}_{\bar{Y}}$ is the standard deviation of sampling distribution for $\bar{Y}$. The equation for the $\mathrm{SE}_{\bar{Y}}$ is the sample standard deviation divided by the square-root of the sample size:
+
+$$ \mathrm{SE}_{\bar{Y}} = \frac{s}{\sqrt{n}} $$
+
+There's no function in *R* to calculate $\mathrm{SE}_{\bar{Y}}$, so let's write our own and add it the "functions.R" file. Make a function called `se_mean()` that takes a vector of numbers and returns $\mathrm{SE}_{\bar{Y}}$. Then, copy the code into "functions.R" and save the file. To use the function, you'll need to run the `source("functions.R")` command again. If you get stuck, unfold the code below to reveal the function.
+
+<details>
+  <summary>Show code</summary>
+  ```{r, eval = FALSE}
+  
+  se_mean <- function(x) {
+    sd(x) / sqrt(length(x))
+  }
+  
+  ```
+</details>
+
+```{r, echo = FALSE, eval = TRUE} 
+
+  se_mean <- function(x) {
+    sd(x) / sqrt(length(x))
+  }
+  x <- c(2.16, -0.79, -0.18,  1.62, -0.98, -1.15, -0.15,  1.34,  1.96,  1.74)
+  se <- se_mean(x)
+
+```
+
+
+Now use the function on the dataset below.
+
+> 2.16 -0.79 -0.18  1.62 -0.98 -1.15 -0.15  1.34  1.96  1.74
+
+You should get $\mathrm{SE}_{\bar{Y}}$ = `r round(se, 3)`.
+
+### 95% confidence intervals
+
+Confidence intervals are a way to show the plausible range of parameter values given the data. 95% confidence intervals will include the true population parameter 95% of the time. We'll learn ways to calculuate confidence intervals for different parameters throughout the class. Today, we'll use the "2 SE" rule to approximate 95% confidence intervals for the sample mean $\bar{Y}$. The lower bound and upper bounds of the approximate 95% confidence interval using the 2 SE rule are:
+
+$$ \text{lower CI}: \bar{Y} - 2 \times \mathrm{SE}_{\bar{Y}} $$
+$$ \text{upper CI}: \bar{Y} + 2 \times \mathrm{SE}_{\bar{Y}} $$
+Use the `mean()` and `se_mean()` functions to calculate the confidence interval for dataset used in the last section. You should get:
+
+```{r, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE} 
+
+  library(kableExtra)
+  library(tibble)
+  tibble(
+    `$\\bar{Y}$` = mean(x),
+    `Lower CI` = mean(x) - 2 * se_mean(x),
+    `Upper CI` = mean(x) + 2 * se_mean(x)
+  ) %>%
+  knitr::kable() %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+## Activities
 
 ### Distribution of sample means
 
@@ -162,7 +220,7 @@ Use the `read.csv()` and `filter()` functions from last week's lab to:
 * assign the `data.frame()` with the name `leafsize`
 * use `filter()` to remove missing values from the `leafsize_cm2` column
 
-If you've done everything correctly, you should get the same values for the population mean and standard deviation seen below:
+If you've done everything correctly, you should get the same values for the population mean seen below:
 
 ```{r, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
 
@@ -174,7 +232,6 @@ leafsize <- read.csv("../Data/wright_etal_2017.csv") %>%
 ```{r, message = FALSE, warning = FALSE}
 
 mean(leafsize$leafsize_cm2)
-sd(leafsize$leafsize_cm2)
 
 ```
 
@@ -208,7 +265,7 @@ Now, increase the number of simulations to 1000 (`n_sim <- 1000`) and try genera
   
   n_sim <- 1e3
   sample_sizes <- c("a. n = 64", "b. n = 256", "c. n = 1024")
-  df <- data.frame(
+  sample_dists <- data.frame(
     sample_size = rep(sample_sizes, each = n_sim),
     Ybar = c(
       sample_mean(x = population, n = 64, n_sim = n_sim)$Ybar,
@@ -217,7 +274,7 @@ Now, increase the number of simulations to 1000 (`n_sim <- 1000`) and try genera
     )
   )
 
-  ggplot(df, aes(Ybar)) +
+  ggplot(sample_dists, aes(Ybar)) +
     facet_wrap(~ sample_size, ncol = 1) +
     xlab("Sample mean") +
     geom_histogram() +
@@ -230,7 +287,7 @@ Now, increase the number of simulations to 1000 (`n_sim <- 1000`) and try genera
 
   n_sim <- 1e3
   sample_sizes <- c("a. n = 64", "b. n = 256", "c. n = 1024")
-  df <- data.frame(
+  sample_dists <- data.frame(
     sample_size = rep(sample_sizes, each = n_sim),
     Ybar = c(
       sample_mean(x = population, n = 64, n_sim = n_sim)$Ybar,
@@ -239,7 +296,7 @@ Now, increase the number of simulations to 1000 (`n_sim <- 1000`) and try genera
     )
   )
 
-  ggplot(df, aes(Ybar)) +
+  ggplot(sample_dists, aes(Ybar)) +
     facet_wrap(~ sample_size, ncol = 1) +
     xlab("Sample mean") +
     geom_histogram() +
@@ -251,7 +308,7 @@ Again, modify the code to make a density plot like this:
 
 ```{r, echo = FALSE, eval = TRUE, message = FALSE}
 
-ggplot(df, aes(Ybar)) +
+ggplot(sample_dists, aes(Ybar)) +
   facet_wrap(~ sample_size, ncol = 1) +
   xlab("Sample mean") +
   geom_density(fill = "tomato") +
@@ -261,8 +318,72 @@ ggplot(df, aes(Ybar)) +
 
 #### c. How does the location, width, and skew of the sampling distribution for $\bar{Y}$ change as $n$ increases?
 
-### 2. WORDS
+### 2. Compare the width of simulated sampling distributions to the equation for $\mathrm{SE}_{\bar{Y}}$
 
-* SE
-* confidence interval
+We have assumed that the `leafsize` dataset represents the entire population of leaves, so we can calculate the "true" mean and standard deviation, as we did in class.
 
+```{r, echo = FALSE, eval = TRUE, message=FALSE, warning = FALSE}
+
+nleaves <- nrow(leafsize)
+tibble(
+  `$\\mu$` = mean(leafsize$leafsize_cm2),
+  `$\\sigma$` = sd(leafsize$leafsize_cm2) * ((nleaves - 1) / nleaves)
+) %>%
+  knitr::kable() %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+#### a. Calculate the *population* standard error of the mean for $n = 64$, $n = 256$, and $n = 1024$
+
+Hint: for the population SE, use $\sigma$ from the table above rather than $s$.
+
+#### b. Calculate the standard deviations of the simulated sampling distributions.
+
+I called the `data.frame` with my simulated sampling distribution `sample_dists`. If you call yours something different, you will need to modify the code below accordingly.
+
+We'll use the `group_by()` and `summarize()` functions from **dplyr** to calculate the standard deviation of the sampling distributions for $\bar{Y}$ under different sample sizes. We used these functions earlier in the `sample_means()` function. `group_by()` takes a `data.frame` and creates subsets for each value of a "group". Usually, this would be each level of a categorical variable. In this case, we'll group by `sample_size` to calculate the standard deviation separarely for each value of $n$.
+
+```{r}
+
+grouped_sample_dists <- group_by(sample_dists, sample_size)
+
+```
+
+The `summarize()` function summarizes one or more variables for each group in a grouped data.frame. We'll calculate the standard deviation of simulated $\bar{Y}$ values -- this is a way to estimate $SE_{\bar{Y}}$ using simulations rather than the equations above. You should get something close to what I have below, but it will be different because of random sampling.
+
+```{r}
+
+summarize(grouped_sample_dists, SE_Ybar = sd(Ybar))
+
+```
+
+#### c. Is the simulated SE from 2b. similar to what you calculated using the equation in 2a.?
+
+### 3. Calculate confidence intervals
+
+The file "caffeine.csv" contains data on the amount of caffeine in a 16 oz. cup of coffee obtained from various vendors. For context, doses of caffeine over 25 mg are enough to increase anxiety in some people, and doses over 300 to 360 mg are enough to significantly increase heart rate in most people. A can of Red Bull contains 80mg of caffeine.
+
+#### a. What is the mean amount of caffeine in 16 oz. coffees?
+
+#### b. What is the 95% confidence interval for the mean? (Use the 2 SE rule)
+
+#### c. Plot the frequency distribution of caffeine levels for these data in a histogram. Is the amount of caffeine in a cup of coffee relatively consistent from one vendor to another? What is the standard deviation of caffeine level? What is the coefficient of variation?
+
+#### d. The file "caffeineStarbucks.csv" has data on six 16 oz. cups of Breakfast Blend coffee sampled on six different days from a Starbucks location. Calculate the mean (and the 95% confidence interval for the mean using the 2 SE rule) for these data. Compare these results to the data taken on the broader sample of vendors in the first file. Describe the difference.
+
+### 4. Calculate approximate 99% confidence intervals
+
+A confidence interval is a range of values that are likely to contain the true value of a parameter. Consider the "caffeine.csv" data again.
+
+#### a. Calculate the approximate 99% confidence interval for the mean caffeine level by using 2.5 SE's rather than 2 SE.
+
+#### b. Compare this 99% confidence interval to the 95% confidence interval you calculate in question 3b. Which confidence interval is wider (i.e., spans a broader range)? Why should this one be wider?
+
+#### c. Let’s compare the quantiles of the distribution of caffeine to this confidence interval. Approximately 95% of the data values should fall between the 2.5% and 97.5% quantiles of the distribution of caffeine. (Explain why this is true.) We can use *R* to calculate the 2.5% and 97.5% quantiles with a command like the following. (Replace `datavector` with the name of the vector of your caffeine data.)
+
+```{r, echo = TRUE, eval = FALSE}
+quantile(datavector, c(0.025, 0.975), na.rm = TRUE)
+```
+
+Are these the same as the boundaries of the 95% confidence interval? If not, why not? Which should bound a smaller region, the quantile or the confidence interval of the mean?
