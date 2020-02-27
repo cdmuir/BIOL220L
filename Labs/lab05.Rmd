@@ -1,0 +1,272 @@
+---
+title: 'Week 5: Probability'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+```
+
+**Disclaimer: These labs rely heavily on those developed by Mike Whitlock for his BIOL 300 course at UBC <https://www.zoology.ubc.ca/~whitlock/bio300/>.** In some cases I have used his material *verbatim*, in other cases I have heavily modified them.
+
+## Goals
+
+* Perform random trials with discrete outcomes
+* Plot probability mass functions
+* Practice the Addition Rule for mutually exclusive events
+
+## Learning the Tools
+
+### Setup
+
+* Install the **dplyr** and **ggplot2** packages 
+* Like last week, make a file called "functions.R" to put custom functions
+
+Remember, to use custom functions, put `source("functions.R")` near the top of lab report script.
+
+### Random trials
+
+This week, we're learning about probability, the foundation for statistical inference. Random trials are a good way to understand the probability of certain events. To conduct random trials, or do any kind of random simulation, we often use functions named something like `r<name>()`. The `r` stand for "random" and `<name>` is the name of a probability distribution, such as `norm` for Normal, `binom` for Binomial, or `unif` for Uniform. Hence, the function `rnorm()` produces random values from a Normal disribution. Today we'll focus on discrete probability distributions. We looked `rnorm()` last week as well.
+
+### Flipping coins
+
+We're going to run several types of random trials with different outcomes. We'll start with coin flipping, which is an example of a [Bernoulli trial](https://en.wikipedia.org/wiki/Bernoulli_trial). There's no function in the base distribution of R for a Bernoulli trial, so we'll write our own for this lab. Add this function to your "functions.R" file and Save.
+
+```{r, bernoulli}
+
+rbernoulli <- function(n, p_heads = 0.5) {
+  
+  ifelse(runif(n) > (1 - p_heads), "heads", "tails")
+  
+}
+
+```
+
+The takes two arguments, `n` and `p_heads`, where `n` is the number of trials (i.e. coin flips) and `p_heads` is the probability of landing on heads, which we could write $\mathrm{Pr}~[\mathrm{heads}]$. Now use this function to run 1 random trial, then 10, and so forth. Then try changing `p_heads` to different values.
+
+```{r, echo = TRUE, eval = FALSE}
+
+rbernoulli(n = 1, p_heads = 0.5)
+rbernoulli(n = 10, p_heads = 0.5)
+
+rbernoulli(n = 1, p_heads = 0.1)
+rbernoulli(n = 10, p_heads = 0.1)
+
+```
+
+For a large number of trials, we can summarize the number of heads and tails using the `table` function.
+
+```{r, echo = TRUE, eval = TRUE}
+
+# We'll now conduct 1000 random Bernoulli trials and assign the output a name 
+# so that we don't have to print out a big long list of "heads", "tails", ...
+
+outcome1 <- rbernoulli(n = 1e3, p_heads = 0.5)
+
+table(outcome1)
+
+outcome2 <- rbernoulli(n = 1e3, p_heads = 0.1)
+
+table(outcome2)
+
+```
+
+Next, let's graph the outcome using `ggplot()`
+
+```{r}
+
+df <- data.frame(
+  event = c(outcome1, outcome2),
+  p_heads = rep(c("p = 0.5", "p = 0.1"), each = 1e3)
+)
+
+ggplot(df, aes(event)) +
+  facet_grid(. ~ p_heads) +
+  geom_bar() +
+  theme_bw()
+
+```
+
+It gets pretty tiresome running all those Bernoulli trials and counting up the outcomes (even on a computer), but there is a shortcut. The [Binomial Distribution](https://en.wikipedia.org/wiki/Binomial_distribution) shows the number of heads for `n` Bernoulli trials with a probability `p_heads`. So we can generate many binomally distributed random variables to ask, for example, how often would we expect see 10 heads in a row?
+
+The `rbinom()` function generates random binomial numbers. The arguments here are different than for `rbernoulli()`, so pay attention. `n` is the number of random numbers to generate (NOT the number of coins to flip, as before); `size` is the number of coins to flip; and `prob` is the same as `p_heads` above. We can generate similar output as above for 1000 flips where `p_heads = 0.5` and `p_heads = 0.1`.
+
+```{r, binomial}
+
+outcome1 <- rbinom(n = 1, size = 1000, prob = 0.5)
+outcome2 <- rbinom(n = 1, size = 1000, prob = 0.1)
+
+```
+
+What do you see when you look at `outcome1` and `outcome2`? Rather than a list of heads, tails, heads, tails, etc., it's just a number. Specifically, the number of heads in 1000 random Bernoulli trials. Let's make a table and plot.
+
+```{r}
+
+df <- data.frame(
+  count = c(outcome1, outcome2, 1000 - outcome1, 1000 - outcome2),
+  event = c("heads", "heads", "tails", "tails"),
+  p_heads = c("p = 0.5", "p = 0.1")
+)
+
+ggplot(df, aes(event, count)) +
+  facet_grid(. ~ p_heads) +
+  geom_col() +
+  theme_bw()
+
+```
+
+It should look very similar to you obtained before using the `rbernoulli()` function.
+
+### Rolling dice
+
+Rolling dice is similar to flipping coins, except there are 6 outcomes rather than 2 for each random trial. Again, we'll write our own function to conduct random tosses. Copy the `rdice()` function into your "functions.R" file. FYI, the `ceiling()` function rounds up to the nearest integer. We use that, combined with the `runif()` function (random uniform distribution) to generate random dice rolls. If you want a challenge, see if you can figure out why this works. Remember to run `source("functions.R")` before you try using the `rdice()` function.
+
+```{r, rdice}
+
+rdice <- function(n, sides = 6) {
+
+  ceiling(runif(n, 0, sides))
+  
+}
+
+```
+
+Try different numbers of random dice trials using `rdice()`. Then try dice with different numbers of sides. Use `table()` to summarize your results.
+
+```{r, echo = TRUE, eval = FALSE}
+
+rdice(n = 1, sides = 6)
+rdice(n = 10, sides = 6)
+
+rdice(n = 1, sides = 12)
+rdice(n = 10, sides = 12)
+
+```
+
+Now try 10,000 (`= 1e4`) trials and use `table()` to summarize the results:
+
+```{r}
+outcome1 <- rdice(n = 1e4, sides = 6)
+table(outcome1)
+```
+
+Now try a 12-sided die and compare the outcomes. Don't worry about the little trick I used to set the `breaks = ...` for the $x$-axis
+
+```{r}
+
+outcome2 <- rdice(n = 1e4, sides = 12)
+
+df <- data.frame(
+  event = c(outcome1, outcome2),
+  sides = rep(c("6 sides", "12 sides"), each = 1e4)
+)
+
+ggplot(df, aes(event)) +
+  facet_grid(. ~ sides, scales = "free") +
+  scale_x_continuous(
+    breaks = function(x) {floor(x[1]):ceiling(x[2])}
+  ) +
+  geom_bar() +
+  theme_bw()
+
+```
+
+As with coin flipping, there is a shortcut to running all those trials, tossing 1000s of dice. Rather than the binomial distribution, when there are more than two outcomes, you use the [Multinomial Distribution](https://en.wikipedia.org/wiki/Multinomial_distribution) (the Binomial distribution is just a special case of the multinomial distribution). We can generate many multinomially distributed random variables to ask, for example, how often would we expect see the number of 5, 10 times in a row for a 6-sided die?
+
+The `rmultinom()` function generates random multinomial numbers. The arguments here are different than for `rdice()`, so pay attention. `n` is the number of random numbers to generate (NOT the number of dice to toss, as before); `size` is the number of dice to toss; and `prob` a vector probabilities. We'll assume that every side of the die has the same probability, so the formula for `prob` is `rep(1 / sides, sides)`, where `sides` is the number of sides on the die. Try a couple examples and think about how this works:
+
+```{r}
+
+sides <- 3
+rep(1 / sides, sides)
+
+sides <- 6
+rep(1 / sides, sides)
+
+sides <- 12
+rep(1 / sides, sides)
+
+```
+
+We've encountered the `rep()` function before. It **rep**eats a number any number of times. It's actually quite powerful. See the help file `?rep` to learn more. Now let's use the `rmultinom()` function
+
+```{r}
+
+sides <- 6
+outcome1 <- rmultinom(n = 1, size = 1e4, prob = rep(1 / sides, sides))
+
+sides <- 12
+outcome2 <- rmultinom(n = 1, size = 1e4, prob = rep(1 / sides, sides))
+
+```
+
+What do you see when you look at `outcome1` and `outcome2`?
+
+## Probability mass functions
+
+For probability **mass** functions (discrete variables) or probability **density** functions (continuous variables), R uses the `d<name>()` functions where `d` stands for "density" of the `<name>` function. For example, `dnorm()` is the for normal distrubtion, `dbinom()` is for the binomial distribution, and so forth.
+
+We could use simulations to figure out out the probability of every possible outcome, but this is tedious, and it turns out we often have solutions already.
+
+### Flipping coins
+
+Let's ask, what's the probability of get $x$ heads for 10 tosses assuming `p_heads = 0.5`. Here's the code and a plot:
+
+```{r}
+
+p <- dbinom(x = 0:10, size = 10, prob = 0.5)
+
+df <- data.frame(
+  n_heads = as.integer(0:10),
+  probability = p
+)
+
+ggplot(df, aes(n_heads, p)) +
+  scale_x_continuous(breaks = 0:10) +
+  geom_col() +
+  xlab("Number of Heads") +
+  ylab("Probability mass") +
+  theme_bw()
+
+```
+
+Fun fact: the `scale_x_continuous()` function allows us to control how the $x$-axis is plotted for a continuous variable using `ggplot()`. Here, we're using it to put tick marks at every integer from 0 to 10 (`0:10`). Try `?scale_x_continuous` to find out more.
+
+## Questions
+
+### 1. Addition rule.
+
+In class, we'll go over the Addition Rule for probability. It states that if two events are *mutually exclusive*, then the probability of getting one OR the other is the sum of their individual probabilities. For example, rolling a 1 or 6 are mutually exclusive on a normal 6-sided die. If both of these events have a probability $1/6$ on a 6-sided die, then the probability of rolling a 1 or a 6 is $1/6 + 1/6 = 1/3$ 
+
+#### a. Assume you perform 5 coin flips with a fair coin ($\text{Pr}[\text{heads}] = 0.5$). Two mutually exclusive events are "5 heads" and "5 tails". Using the `dbinom()` function, what's the probability of getting 5 heads with a fair coin? Is it the same probability as getting 5 tails?
+
+#### b. Using the addition rule, what's the probability of getting 5 heads OR 5 tails in the scenario above?
+
+#### c. Come up with another set of mutually exclusive events and see if you can use the addition rule to calculate the probability of getting one event OR the other.
+
+### 2. Should you take the bet?
+
+A strange man approaches you with an unusual offer. He'll flip a "fair" coin 10 times. If it comes up heads all 10 times, he'll give you \$1,000,000; if any other outcome occurs, you have to give him \$1000
+
+#### a. What's the probability of 10 heads in 10 coin flips, assuming the coin is fair?
+
+#### b. What's the probability of all other possibilities combined (0 heads, 1 heads, 2 heads, etc.)? Hint: remember that the probability of all possible outcomes must sum to 1.
+
+#### c. Should you take the bet?
+
+A rational gambler accepts a bet if the expected reward is greater than the expected cost. The expected value (reward or cost) is the probability of the event times the value. For example, if an event has a probability of 0.2 and the value (reward or cost) is \$100, the expected value is $0.2 \times 100$ =  \$20. Using the information above, calculate the expected values associated with winning the bet (10 heads) and losing (anything but 10 heads). Is the expected reward greater than the expected cost?
+
+### 3. Is this coin fair?
+
+Plot the probability mass function for an *unfair* coin. Choose any value for the probability of getting heads other than 0.5, and plot the probability mass function if you flip it 10 times.
+
+## *R* functions from this lab
+
+* Random number generators like `runif()` and `rbinom()`.
+* Summarizing with `table()`
+* Rounding with `ceiling()`. See also `round()` and `floor()`
+* `rep()` for repeating numbers
+* `scale_x_continuous()` for $x$-axes. Also see `scale_y_continuous()` and `scale_x_discrete()`, `scale_y_discrete()`
+* Probability mass functions, e.g. `dbinom()`
