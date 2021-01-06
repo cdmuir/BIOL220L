@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *RStudio* is a separate program, also free, that provides a more elegant front end for *R*. *RStudio* allows you to easily organize separate windows for *R* commands, graphic, help, etc. in one place.
 
-If your computer does not already have a version of *R* and *RStudio* installed, go to <http://www.zoology.ubc.ca/~whitlock/bio300/labs/downloadingR.html> for instructions about getting set up.
+For this course, you won't need *R* and *RStudio* installed on your own device because we will work in *RStudio Cloud*. However, if you wish to install them on your device, go to <https://rstudio.com/products/rstudio/download/> for instructions about getting set up.
 
 ### What is *RStudio Cloud*?
 
@@ -52,13 +52,13 @@ From [here](https://docs.rstudio.com/other/rstudio-cloud/):
 
 ![](../Images/rstudio-cloud-signup.png)
 
-2. I will share the **biol297-spring2020** Workspace with you once everyone is registered.
+2. I will share the **BIOL220L** Workspace with you once everyone is registered.
 
 3. Click on down-arrow next to "New Project", then select "New Project from Git Repo"
 
 ![](../Images/rstudio-cloud-project.png)
 
-4. Enter the URL of the Git repository (<https://github.com/cdmuir/biol297-spring2020>), then click OK: 
+4. Enter the URL of the Git repository (<https://github.com/cdmuir/BIOL220L>), then click OK: 
 
 ![](../Images/rstudio-cloud-repo.png)
 5. Once the Project is deployed, name the project with your name and the week, e.g. "muir-chris-week01". You will need to click in near the top of the screen to change name from Untitled:
@@ -84,7 +84,7 @@ Type “`2+2`” at the `>` prompt, and hit return. You’ll see that *R* can wo
 Remember, you don’t type the `>` sign. The `>` is the prompt that *R* gives saying it is ready for input. We reproduce it here so you can see which is input (in blue) and which is output (in black or red).
 
 ```{r}
-2+2
+2 + 2
 ```
 
 You can use a wide variety of math functions to make calculations here, e.g., `log()` calculates the log of a number:
@@ -415,10 +415,10 @@ comments.
 ----------|-------------
  Body temperature in Celcius |
  How much aspirin is given per dose for a patient |
- Number of televersions per person |
+ Number of televisions per person |
  Height (including neck and extended legs) of giraffes |
  
-4. USe *R* to calculate:
+4. Use *R* to calculate:
 
   a. $15 \times 17$
   b. $13^3$
@@ -443,8 +443,7 @@ Here is a list of measurements, each from a different pool, of the concentration
 
 > 71.0, 77.3, 82.6, 96.1, 106.6, 112.8, 121.2, 126.4, 127.5, 143.1
 
-For the same 10 animals, they also measured the oxygen consumption in non-feeding
-dives. With the 10 animals in the same order as before, here are those data:
+For the same 10 animals, they also measured the oxygen consumption in non-feeding dives. With the 10 animals in the same order as before, here are those data:
 
 > 42.2, 51.7, 59.8, 66.5, 81.9, 82.0, 81.3, 81.3, 96.0, 104.1
 
